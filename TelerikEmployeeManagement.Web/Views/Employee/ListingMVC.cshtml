@@ -1,0 +1,158 @@
+﻿@{
+    ViewData["Title"] = "ListingMVC";
+}
+
+@using Newtonsoft.Json;
+@using TelerikEmployeeManagement.Models.Enums;
+@using TelerikEmployeeManagement.Models.Models;
+@using TelerikEmployeeManagement.Web.ViewModels;
+
+@model EmployeeViewModel
+
+<button type="button" class="btn btn-primary" onclick="setEditEmployeeModalPhotos(@(JsonConvert.SerializeObject(Model.AllEmployees)))">Load Script</button>
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Add Employee
+</button>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Firsta</th>
+            <th scope="col">Last</th>
+            <th scope="col">Email</th>
+            <th scope="col" colspan="6">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.AllEmployees != null & Model.AllEmployees?.Count() > 0)
+        {
+            @foreach (var emp in Model.AllEmployees)
+            {
+                <tr>
+                    <th scope="row">@(emp.EmployeeId)</th>
+                    <td>@(emp.FirstName)</td>
+                    <td>@(emp.LastName)</td>
+                    <td>@(emp.Email)</td>
+                    <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#@($"EditModel_")" onclick="editEmployee(@($@"'{emp.EmployeeId}'"))">Edit</button></td>
+                    <td><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@($"DeleteModel_{emp.EmployeeId}")">Delete</button></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+<!-- Button trigger modal -->
+<!-- Add Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("ListingMVC", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.Employee.FirstName)
+                        @Html.TextBoxFor(model => model.Employee.FirstName, new { @class = "form-control"})
+
+                    </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.Employee.LastName)
+                        @Html.TextBoxFor(model => model.Employee.LastName, new { @class = "form-control"})
+                    </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.Employee.Email)
+                        @Html.TextBoxFor(model => model.Employee.Email, new { @class = "form-control"})
+                    </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.Employee.DateOfBrith)
+                        @Html.TextBoxFor(model => model.Employee.DateOfBrith, new { @class = "form-control", type="date"})
+                    </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(model => model.Employee.DepartmentId, "Department")
+
+                        @Html.DropDownListFor(model => model.Employee.DepartmentId,
+                    Model.AllDepartment.Select(x => new SelectListItem { Text = x.DepartmentName, Value = x.DepartmentId.ToString()}).ToList(),
+                    "Select a department", new { @class="form-control"})
+                    </div>
+                    <div class="mb-3">
+                        @Html.LabelFor(model=> model.Employee.PhotoPath, new {@for="IAddPhoto"})
+                        <input type="file" class="form-control" id="IAddPhoto" name="PhotoPath">
+                        <img id="IPhotoDisplay" style="height:100px" />
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Employee.Gender)
+                        <label class="radio-inline">@Html.RadioButtonFor(model => model.Employee.Gender, Gender.Female)Female</label>
+                        <label class="radio-inline">@Html.RadioButtonFor(model => model.Employee.Gender, Gender.Male)Male</label>
+                        <label class="radio-inline">@Html.RadioButtonFor(model => model.Employee.Gender, Gender.Other)Other</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                }
+
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>*@
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal-->
+
+
+<div class="modal fade" id="@($"EditModel_")" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="IEditForm"></div>
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>*@
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@foreach (var item in Model.AllEmployees)
+{
+
+    <div class="modal fade" tabindex="-1" id="@($"DeleteModel_{item.EmployeeId}")">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure, you want to delete @($@"""{item.FirstName}""?")</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="deleteEmployee(@($"'{item.EmployeeId}'"))">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+<script src="~/controller/employee/employee.js"></script>
+
+<script>
+    
+</script>
+

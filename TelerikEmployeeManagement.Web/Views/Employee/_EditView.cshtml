@@ -1,0 +1,53 @@
+﻿@using TelerikEmployeeManagement.Models.Enums;
+@using TelerikEmployeeManagement.Web.ViewModels;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model EmployeeViewModel
+
+@using (Html.BeginForm("ListingMVC", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(x=> x.EditEmployee.EmployeeId)
+    <div class="mb-3">
+        @Html.LabelFor(model => model.EditEmployee.FirstName)
+        @Html.TextBoxFor(model => model.EditEmployee.FirstName, new { @class="form-control" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(model => model.EditEmployee.LastName)
+        @Html.TextBoxFor(model => model.EditEmployee.LastName, new { @class="form-control" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(model => model.EditEmployee.Email)
+        @Html.TextBoxFor(model => model.EditEmployee.Email, new { @class="form-control", type="email" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(model => model.EditEmployee.DateOfBrith)
+        @Html.TextBoxFor(model => model.EditEmployee.DateOfBrith, "{0: yyyy-MM-dd}", new { @class="form-control", type="date", id="dateOfBirthInput" })
+        @Html.HiddenFor(model => model.EditEmployee.DateOfBrith, new {id = "iHiddenDOB"})
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(model => model.EditEmployee.DepartmentId, "Department")
+        @Html.DropDownListFor(model => model.EditEmployee.DepartmentId, Model.AllDepartment.Select(x=> new SelectListItem {
+    Value = x.DepartmentId.ToString(),
+    Text = x.DepartmentName
+    }), "Select a Department", new {@class="form-control"})
+    </div>
+    <div class="mb-3">
+        <label for="IPhoto" class="form-label">Photo</label>
+        <input type="file" class="form-control" id="@($"IPhoto_")" name="PhotoPath">
+        <img src="/@(Model.EditEmployee.PhotoPath)" style="height: 100px" id="@($"IPhotoDisplay_")" />
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.EditEmployee.Gender)
+        <label class="radio-inline">@Html.RadioButtonFor(model => model.EditEmployee.Gender, Gender.Female)Female</label>
+        <label class="radio-inline">@Html.RadioButtonFor(model => model.EditEmployee.Gender, Gender.Male)Male</label>
+        <label class="radio-inline">@Html.RadioButtonFor(model => model.EditEmployee.Gender, Gender.Other)Other</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+}
+
+<script src="~/controller/employee/editemployee.js"></script>
