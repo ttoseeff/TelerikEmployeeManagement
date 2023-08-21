@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
@@ -16,15 +17,19 @@ namespace TelerikEmployeeManagement.Models.Models
         public Guid EmployeeId { get; set; }
         [Required(ErrorMessage = "First Name Must be provided.")]
         [StringLength(100, MinimumLength = 2)]
+        [DisplayName("First Name")]
         public string FirstName { get; set; }
         [Required]
+        [DisplayName("Last Name")]
         public string LastName { get; set; }
         [EmailAddress]
         [Required]
-        [EmailDomainValidator(AllowedDomain = "Toseef.com", ErrorMessage = "Domain must be Toseef.com")]
+        [EmailDomainValidator(AllowedDomain = "toseef.com", ErrorMessage = "Domain must be Toseef.com")]
         public string Email { get; set; }
         [Required]
+        [DisplayName("Date of Birth")]
         public DateTime DateOfBrith { get; set; }
+        [Required]
         public Gender? Gender { get; set; }
         public Guid? DepartmentId { get; set; }
         public string? PhotoPath { get; set; }

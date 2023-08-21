@@ -14,10 +14,10 @@ namespace TelerikEmployeeManagement.Models.CustomValidators
         protected override ValidationResult IsValid(object value,
             ValidationContext validationContext)
         {
-            if (value?.ToString().Split("@")?.Length > 1)
+            if (value?.ToString()?.Split("@")?.Length > 1)
             {
-                string[] strings = value.ToString().Split('@');
-                if (strings[1].ToUpper() == AllowedDomain.ToUpper())
+                string[]? strings = value?.ToString()?.Split('@');
+                if (strings?[1].ToUpper() == AllowedDomain.ToUpper())
                 {
                     return null;
                 }

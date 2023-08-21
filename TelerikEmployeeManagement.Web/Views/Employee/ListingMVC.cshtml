@@ -56,22 +56,27 @@
             <div class="modal-body">
                 @using (Html.BeginForm("ListingMVC", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
+                    @Html.ValidationSummary()
                     <div class="mb-3">
                         @Html.LabelFor(model => model.Employee.FirstName)
                         @Html.TextBoxFor(model => model.Employee.FirstName, new { @class = "form-control"})
+                        @Html.ValidationMessageFor(model => model.Employee.FirstName, "", new { @class="text-danger"})
 
                     </div>
                     <div class="mb-3">
                         @Html.LabelFor(model => model.Employee.LastName)
                         @Html.TextBoxFor(model => model.Employee.LastName, new { @class = "form-control"})
+                        @Html.ValidationMessageFor(model => model.Employee.LastName, "", new { @class="text-danger"})
                     </div>
                     <div class="mb-3">
                         @Html.LabelFor(model => model.Employee.Email)
                         @Html.TextBoxFor(model => model.Employee.Email, new { @class = "form-control"})
+                        @Html.ValidationMessageFor(model => model.Employee.Email, "", new { @class="text-danger"})
                     </div>
                     <div class="mb-3">
                         @Html.LabelFor(model => model.Employee.DateOfBrith)
                         @Html.TextBoxFor(model => model.Employee.DateOfBrith, new { @class = "form-control", type="date"})
+                        @Html.ValidationMessageFor(model => model.Employee.DateOfBrith, "", new { @class="text-danger"})
                     </div>
                     <div class="mb-3">
                         @Html.LabelFor(model => model.Employee.DepartmentId, "Department")
@@ -79,10 +84,11 @@
                         @Html.DropDownListFor(model => model.Employee.DepartmentId,
                     Model.AllDepartment.Select(x => new SelectListItem { Text = x.DepartmentName, Value = x.DepartmentId.ToString()}).ToList(),
                     "Select a department", new { @class="form-control"})
+                        @Html.ValidationMessageFor(model => model.Employee.DepartmentId, "", new { @class="text-danger"})
                     </div>
                     <div class="mb-3">
                         @Html.LabelFor(model=> model.Employee.PhotoPath, new {@for="IAddPhoto"})
-                        <input type="file" class="form-control" id="IAddPhoto" name="PhotoPath">
+                        <input type="file" class="form-control" id="IAddPhoto" name="PhotoPath" required>
                         <img id="IPhotoDisplay" style="height:100px" />
                     </div>
 
@@ -91,6 +97,7 @@
                         <label class="radio-inline">@Html.RadioButtonFor(model => model.Employee.Gender, Gender.Female)Female</label>
                         <label class="radio-inline">@Html.RadioButtonFor(model => model.Employee.Gender, Gender.Male)Male</label>
                         <label class="radio-inline">@Html.RadioButtonFor(model => model.Employee.Gender, Gender.Other)Other</label>
+                        @Html.ValidationMessageFor(model => model.Employee.Gender, "", new { @class="text-danger"})
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 }
@@ -150,9 +157,7 @@
 }
 
 
-<script src="~/controller/employee/employee.js"></script>
 
-<script>
-    
-</script>
+@(await Html.PartialAsync("_ValidationScriptsPartial"))
+<script src="~/controller/employee/employee.js"></script>
 

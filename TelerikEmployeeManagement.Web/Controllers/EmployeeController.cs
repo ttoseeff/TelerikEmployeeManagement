@@ -62,28 +62,30 @@ namespace TelerikEmployeeManagement.Web.Controllers
 
         [Route("listing-mvc")]
         [HttpPost]
-        public async Task<IActionResult> ListingMVC(Employee EditEmployee, IFormFile PhotoPath)
+        public async Task<IActionResult> ListingMVC(Employee Employee, IFormFile? PhotoPath)
         {
-            if (PhotoPath != null && PhotoPath.Length > 0)
+            if (ModelState.IsValid)
             {
-                var path = Path.Combine(
-                     Directory.GetCurrentDirectory(),
-                     "wwwroot", PhotoPath.FileName);
-                EditEmployee.PhotoPath = PhotoPath.FileName;
-                using (FileStream stream = new FileStream(path, FileMode.Create))
+                if (PhotoPath != null && PhotoPath.Length > 0)
                 {
-                    await PhotoPath.CopyToAsync(stream);
+                    var path = Path.Combine(
+                         Directory.GetCurrentDirectory(),
+                         "wwwroot", PhotoPath.FileName);
+                    Employee.PhotoPath = PhotoPath.FileName;
+                    using (FileStream stream = new FileStream(path, FileMode.Create))
+                    {
+                        await PhotoPath.CopyToAsync(stream);
+                    }
+                }
+
+                if (Employee != null)
+                {
+                    if (Employee.EmployeeId == Guid.Empty)
+                        await _EmployeeRepository.AddEmployee(Employee);
+                    else
+                        await _EmployeeRepository.UpdateEmployee(Employee);
                 }
             }
-
-            if(EditEmployee != null)
-            {
-                if (EditEmployee.EmployeeId == Guid.Empty)
-                    await _EmployeeRepository.AddEmployee(EditEmployee);
-                else
-                    await _EmployeeRepository.UpdateEmployee(EditEmployee);
-            }
-
             return RedirectToAction("ListingMVC");
         }
 
@@ -101,7 +103,7 @@ namespace TelerikEmployeeManagement.Web.Controllers
             EmployeeViewModel employeeViewModel = new EmployeeViewModel(_EmployeeRepository, _DepartmentRepository);
             employeeViewModel.AllEmployees = await employeeViewModel.GetAllEmployees();
             employeeViewModel.AllDepartment = await employeeViewModel.GetAllDepartments();
-            employeeViewModel.EditEmployee = employeeViewModel.AllEmployees.FirstOrDefault(x => x.EmployeeId == EmployeeId);
+            employeeViewModel.Employee = employeeViewModel.AllEmployees.FirstOrDefault(x => x.EmployeeId == EmployeeId);
             return PartialView("_EditView", employeeViewModel);
         }
 

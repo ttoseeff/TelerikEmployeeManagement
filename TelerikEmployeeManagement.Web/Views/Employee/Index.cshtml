@@ -54,23 +54,23 @@
                       enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="IFirstName" class="form-label">First Name</label>
-                        <input type="text" name="FirstName" class="form-control" id="IFirstName">
+                        <input type="text" name="FirstName" class="form-control" id="IFirstName" required>
                     </div>
                     <div class="mb-3">
                         <label for="ILastName" class="form-label">Last Name</label>
-                        <input type="text" name="LastName" class="form-control" id="ILastName">
+                        <input type="text" name="LastName" class="form-control" id="ILastName" required>
                     </div>
                     <div class="mb-3">
                         <label for="IEmail" class="form-label">Email</label>
-                        <input type="text" name="Email" class="form-control" id="IEmail">
+                        <input type="email" name="Email" class="form-control" id="IEmail" required pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}">
                     </div>
                     <div class="mb-3">
                         <label for="IDateofBirth" class="form-label">Date of Birth</label>
-                        <input type="date" name="DateOfBrith" class="form-control" id="IDateofBirth">
+                        <input type="date" name="DateOfBrith" class="form-control" id="IDateofBirth" required>
                     </div>
                     <div class="mb-3">
                         <label for="IDepartment" class="form-label">Department</label>
-                        <select class="form-control" id="IDepartment" name="DepartmentId">
+                        <select class="form-control" id="IDepartment" name="DepartmentId" required>
                             @foreach (var item in Model.AllDepartment)
                             {
                                 <option value="@(item.DepartmentId)">@(item.DepartmentName)</option>
@@ -79,13 +79,13 @@
                     </div>
                     <div class="mb-3">
                         <label for="IPhoto" class="form-label">Photo</label>
-                        <input type="file" class="form-control" id="IAddPhoto" name="PhotoPath">
+                        <input type="file" class="form-control" id="IAddPhoto" name="PhotoPath" required>
                         <img id="IPhotoDisplay" style="height:100px" />
                     </div>
 
                     <div class="form-group">
                         <label>Gender</label>
-                        <label class="radio-inline"><input type="radio" name="Gender" value="@(Gender.Female)">Female</label>
+                        <label class="radio-inline"><input type="radio" name="Gender" value="@(Gender.Female)" required>Female</label>
                         <label class="radio-inline"><input type="radio" name="Gender" value="@(Gender.Male)">Male</label>
                         <label class="radio-inline"><input type="radio" name="Gender" value="@(Gender.Other)">Other</label>
                     </div>

@@ -10,44 +10,51 @@
 
 @using (Html.BeginForm("ListingMVC", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    @Html.HiddenFor(x=> x.EditEmployee.EmployeeId)
+    @Html.HiddenFor(x=> x.Employee.EmployeeId)
     <div class="mb-3">
-        @Html.LabelFor(model => model.EditEmployee.FirstName)
-        @Html.TextBoxFor(model => model.EditEmployee.FirstName, new { @class="form-control" })
+        @Html.LabelFor(model => model.Employee.FirstName)
+        @Html.TextBoxFor(model => model.Employee.FirstName, new { @class="form-control" })
+        @Html.ValidationMessageFor(model => model.Employee.FirstName, "", new { @class="text-danger"})
     </div>
     <div class="mb-3">
-        @Html.LabelFor(model => model.EditEmployee.LastName)
-        @Html.TextBoxFor(model => model.EditEmployee.LastName, new { @class="form-control" })
+        @Html.LabelFor(model => model.Employee.LastName)
+        @Html.TextBoxFor(model => model.Employee.LastName, new { @class="form-control" })
+        @Html.ValidationMessageFor(model => model.Employee.LastName, "", new { @class="text-danger"})
     </div>
     <div class="mb-3">
-        @Html.LabelFor(model => model.EditEmployee.Email)
-        @Html.TextBoxFor(model => model.EditEmployee.Email, new { @class="form-control", type="email" })
+        @Html.LabelFor(model => model.Employee.Email)
+        @Html.TextBoxFor(model => model.Employee.Email, new { @class="form-control", type="email" })
+        @Html.ValidationMessageFor(model => model.Employee.Email, "", new { @class="text-danger"})
     </div>
     <div class="mb-3">
-        @Html.LabelFor(model => model.EditEmployee.DateOfBrith)
-        @Html.TextBoxFor(model => model.EditEmployee.DateOfBrith, "{0: yyyy-MM-dd}", new { @class="form-control", type="date", id="dateOfBirthInput" })
-        @Html.HiddenFor(model => model.EditEmployee.DateOfBrith, new {id = "iHiddenDOB"})
+        @Html.LabelFor(model => model.Employee.DateOfBrith)
+        @Html.TextBoxFor(model => model.Employee.DateOfBrith, "{0: yyyy-MM-dd}", new { @class="form-control", type="date", id="dateOfBirthInput" })
+        @Html.HiddenFor(model => model.Employee.DateOfBrith, new {id = "iHiddenDOB"})
+        @Html.ValidationMessageFor(model => model.Employee.DateOfBrith, "", new { @class="text-danger"})
     </div>
     <div class="mb-3">
-        @Html.LabelFor(model => model.EditEmployee.DepartmentId, "Department")
-        @Html.DropDownListFor(model => model.EditEmployee.DepartmentId, Model.AllDepartment.Select(x=> new SelectListItem {
+        @Html.LabelFor(model => model.Employee.DepartmentId, "Department")
+        @Html.DropDownListFor(model => model.Employee.DepartmentId, Model.AllDepartment.Select(x=> new SelectListItem {
     Value = x.DepartmentId.ToString(),
     Text = x.DepartmentName
     }), "Select a Department", new {@class="form-control"})
+        @Html.ValidationMessageFor(model => model.Employee.DepartmentId, "", new { @class="text-danger"})
     </div>
     <div class="mb-3">
         <label for="IPhoto" class="form-label">Photo</label>
         <input type="file" class="form-control" id="@($"IPhoto_")" name="PhotoPath">
-        <img src="/@(Model.EditEmployee.PhotoPath)" style="height: 100px" id="@($"IPhotoDisplay_")" />
+        <img src="/@(Model.Employee.PhotoPath)" style="height: 100px" id="@($"IPhotoDisplay_")" />
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.EditEmployee.Gender)
-        <label class="radio-inline">@Html.RadioButtonFor(model => model.EditEmployee.Gender, Gender.Female)Female</label>
-        <label class="radio-inline">@Html.RadioButtonFor(model => model.EditEmployee.Gender, Gender.Male)Male</label>
-        <label class="radio-inline">@Html.RadioButtonFor(model => model.EditEmployee.Gender, Gender.Other)Other</label>
+        @Html.LabelFor(model => model.Employee.Gender)
+        <label class="radio-inline">@Html.RadioButtonFor(model => model.Employee.Gender, Gender.Female)Female</label>
+        <label class="radio-inline">@Html.RadioButtonFor(model => model.Employee.Gender, Gender.Male)Male</label>
+        <label class="radio-inline">@Html.RadioButtonFor(model => model.Employee.Gender, Gender.Other)Other</label>
+        @Html.ValidationMessageFor(model => model.Employee.Gender, "", new { @class="text-danger"})
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 }
 
+@(await Html.PartialAsync("_ValidationScriptsPartial"))
 <script src="~/controller/employee/editemployee.js"></script>
