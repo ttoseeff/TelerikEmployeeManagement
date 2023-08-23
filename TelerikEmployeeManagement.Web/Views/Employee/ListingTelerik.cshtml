@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "ListingMVC";
+    ViewData["Title"] = "ListingTelerik";
 }
 
 @using Newtonsoft.Json;
@@ -13,33 +13,30 @@
     Add Employee
 </button>
 <br />
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Firsta</th>
-            <th scope="col">Last</th>
-            <th scope="col">Email</th>
-            <th scope="col" colspan="6">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.AllEmployees != null & Model.AllEmployees?.Count() > 0)
+
+    @(Html.Kendo().Grid<Employee>(Model.AllEmployees)
+        .Name("grid")
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(7)
+            .ServerOperation(false)
+         )
+        .ToolBar(tools =>
         {
-            @foreach (var emp in Model.AllEmployees)
-            {
-                <tr>
-                    <th scope="row">@(emp.EmployeeId)</th>
-                    <td>@(emp.FirstName)</td>
-                    <td>@(emp.LastName)</td>
-                    <td>@(emp.Email)</td>
-                    <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#@($"EditModel_")" onclick="editEmployee(@($@"'{emp.EmployeeId}'"))">Edit</button></td>
-                    <td><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@($"DeleteModel_{emp.EmployeeId}")">Delete</button></td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
+            tools.Pdf().Text("Export PDF");
+            tools.Excel().Text("Export Excel");
+        })
+        .Pageable()
+        .Sortable()
+        .Filterable()
+        .Columns(columns =>
+        {
+            columns.Bound(f => f.EmployeeId);
+            columns.Bound(f => f.FirstName);
+            columns.Bound(f => f.LastName);
+            columns.Bound(f => f.Email);
+        })
+    )
 
 
 <!-- Button trigger modal -->
@@ -52,36 +49,34 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm("ListingMVC", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                @using (Html.BeginForm("ListingTelerik", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     @Html.ValidationSummary()
                     <div class="mb-3">
-                        @Html.LabelFor(model => model.Employee.FirstName)
-                        @Html.TextBoxFor(model => model.Employee.FirstName, new { @class = "form-control"})
+                        @Html.Kendo().TextBoxFor(model => model.Employee.FirstName).HtmlAttributes(new { @class = "form-control" }).Label(l => l.Content("First Name"))
                         @Html.ValidationMessageFor(model => model.Employee.FirstName, "", new { @class="text-danger"})
-
                     </div>
                     <div class="mb-3">
-                        @Html.LabelFor(model => model.Employee.LastName)
-                        @Html.TextBoxFor(model => model.Employee.LastName, new { @class = "form-control"})
+                        @Html.Kendo().TextBoxFor(model => model.Employee.LastName).HtmlAttributes(new { @class = "form-control" }).Label(l => l.Content("Last Name"))
                         @Html.ValidationMessageFor(model => model.Employee.LastName, "", new { @class="text-danger"})
                     </div>
                     <div class="mb-3">
-                        @Html.LabelFor(model => model.Employee.Email)
-                        @Html.TextBoxFor(model => model.Employee.Email, new { @class = "form-control"})
+                        @Html.Kendo().TextBoxFor(model => model.Employee.Email).HtmlAttributes(new {@class = "form-control", type="email"}).Label(l => l.Content("Email"))
                         @Html.ValidationMessageFor(model => model.Employee.Email, "", new { @class="text-danger"})
                     </div>
                     <div class="mb-3">
-                        @Html.LabelFor(model => model.Employee.DateOfBrith)
-                        @Html.TextBoxFor(model => model.Employee.DateOfBrith, new { @class = "form-control", type="date"})
+                        @Html.Kendo().DatePickerFor(model => model.Employee.DateOfBrith).HtmlAttributes(new { @class = "form-control"}).Label(l => l.Content("Date of Birth"))
                         @Html.ValidationMessageFor(model => model.Employee.DateOfBrith, "", new { @class="text-danger"})
                     </div>
                     <div class="mb-3">
-                        @Html.LabelFor(model => model.Employee.DepartmentId, "Department")
-
-                        @Html.DropDownListFor(model => model.Employee.DepartmentId,
-                    Model.AllDepartment.Select(x => new SelectListItem { Text = x.DepartmentName, Value = x.DepartmentId.ToString()}).ToList(),
-                    "Select a department", new { @class="form-control"})
+                        @(Html.Kendo().DropDownListFor(model => model.Employee.DepartmentId)
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .HtmlAttributes(new { @class = "form-control" })
+                            .OptionLabel("Select a Department")
+                            .Label(l => l.Content("Department"))
+                            .BindTo(Model.AllDepartment.Select(x => new SelectListItem { Text = x.DepartmentName, Value = x.DepartmentId.ToString() }))
+                            )
                         @Html.ValidationMessageFor(model => model.Employee.DepartmentId, "", new { @class="text-danger"})
                     </div>
                     <div class="mb-3">
@@ -91,10 +86,23 @@
                     </div>
 
                     <div class="form-group">
+                        @*@(
+                    Html.Kendo().RadioGroupFor(model => model.Employee.Gender)
+                    .LabelPosition(RadioGroupLabelPosition.After)
+                    .Items(i =>
+                    {
+                    i.Add().Label("Male").Value(Gender.Male.ToString());
+                    i.Add().Label("Female").Value(Gender.Female.ToString());
+                    i.Add().Label("Other").Value(Gender.Other.ToString());
+                    })
+                    .Value("0")
+                    .LabelPosition(RadioGroupLabelPosition.After)
+                    )*@
+
                         @Html.LabelFor(model => model.Employee.Gender)
-                        <label class="radio-inline">@Html.RadioButtonFor(model => model.Employee.Gender, Gender.Female)Female</label>
-                        <label class="radio-inline">@Html.RadioButtonFor(model => model.Employee.Gender, Gender.Male)Male</label>
-                        <label class="radio-inline">@Html.RadioButtonFor(model => model.Employee.Gender, Gender.Other)Other</label>
+                        <label class="radio-inline">@Html.Kendo().RadioButtonFor(model => model.Employee.Gender).Value(Gender.Male) Female</label>
+                        <label class="radio-inline">@Html.Kendo().RadioButtonFor(model => model.Employee.Gender).Value(Gender.Female) Male</label>
+                        <label class="radio-inline">@Html.Kendo().RadioButtonFor(model => model.Employee.Gender).Value(Gender.Other) Other</label>
                         @Html.ValidationMessageFor(model => model.Employee.Gender, "", new { @class="text-danger"})
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>

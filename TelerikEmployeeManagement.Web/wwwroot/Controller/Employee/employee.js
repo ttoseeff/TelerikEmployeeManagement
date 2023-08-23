@@ -41,6 +41,35 @@ function editEmployee(employeeId) {
     })
 }
 
+function editEmployeeTelerik(employeeId) {
+    var url = "/Employee/EditEmployee";
+    //$.get(url, { EmployeeId: employeeId, isTelerik: true }, function (data) {
+    //    $("#IEditForm").html(data);
+    //})
+   
+    $.ajax({
+        url: "/Employee/RenderEditEmployee", // Replace with your actual controller and action
+        method: "GET",
+        data: { employeeId: employeeId},
+        success: function (data) {
+            // Successfully loaded the partial view
+            // Insert the content into the container
+            $("#IEditForm").html(data);
+
+            // If you have initialization code for Telerik UI controls, call it here
+            // For example: InitializeTelerikControls();
+        },
+        error: function (xhr, status, error) {
+            // Handle error if the AJAX call fails
+            console.error("Error loading partial view:", error);
+        },
+        complete: function (data) {
+            console.log(data);
+            $("#IEditForm").html(data.responseText);
+        }
+    });
+}
+
 //function editEmployee(employeeId) {
 //    var url = "/Employee/EditEmployee";
 //    $.get(url, { EmployeeId: employeeId }, function (data) {

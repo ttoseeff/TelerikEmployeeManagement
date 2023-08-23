@@ -89,6 +89,46 @@ namespace TelerikEmployeeManagement.Web.Controllers
             return RedirectToAction("ListingMVC");
         }
 
+        [Route("listing-telerik")]
+        public async Task<IActionResult> ListingTelerik()
+        {
+            EmployeeViewModel employeeViewModel = new EmployeeViewModel(_EmployeeRepository, _DepartmentRepository);
+            employeeViewModel.AllEmployees = await employeeViewModel.GetAllEmployees();
+            employeeViewModel.AllDepartment = await employeeViewModel.GetAllDepartments();
+            var list = await _EmployeeRepository.GetEmployees();
+            return View(employeeViewModel);
+        }
+
+
+        [Route("listing-telerik")]
+        [HttpPost]
+        public async Task<IActionResult> ListingTelerik(Employee Employee, IFormFile? PhotoPath)
+        {
+            if (ModelState.IsValid)
+            {
+                if (PhotoPath != null && PhotoPath.Length > 0)
+                {
+                    var path = Path.Combine(
+                         Directory.GetCurrentDirectory(),
+                         "wwwroot", PhotoPath.FileName);
+                    Employee.PhotoPath = PhotoPath.FileName;
+                    using (FileStream stream = new FileStream(path, FileMode.Create))
+                    {
+                        await PhotoPath.CopyToAsync(stream);
+                    }
+                }
+
+                if (Employee != null)
+                {
+                    if (Employee.EmployeeId == Guid.Empty)
+                        await _EmployeeRepository.AddEmployee(Employee);
+                    else
+                        await _EmployeeRepository.UpdateEmployee(Employee);
+                }
+            }
+            return RedirectToAction("ListingTelerik");
+        }
+
         [Route("DeleteEmployee")]
         [HttpGet]
         public async Task DeleteEmployee(Guid EmployeeId)
@@ -98,13 +138,32 @@ namespace TelerikEmployeeManagement.Web.Controllers
 
         [Route("EditEmployee")]
         [HttpGet]
-        public async Task<PartialViewResult> EditEmployee(Guid EmployeeId)
+        public async Task<PartialViewResult> EditEmployee(Guid EmployeeId, bool isTelerik = false)
         {
             EmployeeViewModel employeeViewModel = new EmployeeViewModel(_EmployeeRepository, _DepartmentRepository);
             employeeViewModel.AllEmployees = await employeeViewModel.GetAllEmployees();
             employeeViewModel.AllDepartment = await employeeViewModel.GetAllDepartments();
             employeeViewModel.Employee = employeeViewModel.AllEmployees.FirstOrDefault(x => x.EmployeeId == EmployeeId);
-            return PartialView("_EditView", employeeViewModel);
+            if (!isTelerik)
+            {
+
+                return PartialView("_EditView", employeeViewModel);
+            }
+            else
+            {
+                return PartialView("_EditViewTelerik", employeeViewModel);
+            }
+        }
+
+        [HttpGet]
+        [Route("RenderEditEmployee")]
+        public async Task<PartialViewResult> RenderEditEmployee(Guid employeeId)
+        {
+            EmployeeViewModel employeeViewModel = new EmployeeViewModel(_EmployeeRepository, _DepartmentRepository);
+            employeeViewModel.AllEmployees = await employeeViewModel.GetAllEmployees();
+            employeeViewModel.AllDepartment = await employeeViewModel.GetAllDepartments();
+            employeeViewModel.Employee = employeeViewModel.AllEmployees.FirstOrDefault(x => x.EmployeeId == employeeId);
+            return PartialView("_EditViewTelerik", employeeViewModel);
         }
 
     }
