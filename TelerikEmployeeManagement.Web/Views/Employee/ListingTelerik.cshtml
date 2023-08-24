@@ -14,28 +14,23 @@
 </button>
 <br />
 
-    @(Html.Kendo().Grid<Employee>(Model.AllEmployees)
+@(
+Html.Kendo().Grid<Employee>(Model.AllEmployees)
         .Name("grid")
+        .HtmlAttributes(new { id = "iGrid" })
         .DataSource(dataSource => dataSource
             .Ajax()
-            .PageSize(7)
             .ServerOperation(false)
          )
-        .ToolBar(tools =>
-        {
-            tools.Pdf().Text("Export PDF");
-            tools.Excel().Text("Export Excel");
-        })
-        .Pageable()
-        .Sortable()
-        .Filterable()
         .Columns(columns =>
         {
-            columns.Bound(f => f.EmployeeId);
             columns.Bound(f => f.FirstName);
             columns.Bound(f => f.LastName);
             columns.Bound(f => f.Email);
         })
+        .Pageable()
+        .Sortable()
+        
     )
 
 
@@ -49,7 +44,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm("ListingTelerik", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                @using (Html.BeginForm("ListingTelerik", "Employee", FormMethod.Post, new { enctype = "multipart/form-data", id="iAddEmployee" }))
                 {
                     @Html.ValidationSummary()
                     <div class="mb-3">
@@ -166,4 +161,13 @@
 
 @(await Html.PartialAsync("_ValidationScriptsPartial"))
 <script src="~/controller/employee/employee.js"></script>
+
+<script>
+
+    function onError(e) {
+        debugger
+        alert();
+        console.log(e.status);
+    }
+</script>
 

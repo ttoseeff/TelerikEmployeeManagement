@@ -26,6 +26,11 @@ namespace TelerikEmployeeManagement.Web.ViewModels
             return (await _EmployeeRepository.GetEmployees()).ToList();
         }
 
+        public IQueryable<Employee> GetAllEmployeesQuery()
+        {
+            return _EmployeeRepository.GetEmployeesQuery();
+        }
+
         public async Task<List<Department>> GetAllDepartments()
         {
             return (await _DepartmentRepository.GetDepartments()).ToList();

@@ -23,6 +23,11 @@ namespace TelerikEmployeeManagement.Repositories.Repositories
             return await appDbContext.Employees.ToListAsync();
         }
 
+        public IQueryable<Employee> GetEmployeesQuery()
+        {
+            return appDbContext.Employees;
+        }
+
         public async Task<Employee> GetEmployee(Guid employeeId)
         {
             return await appDbContext.Employees

@@ -1,12 +1,18 @@
 
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
+using System.Text.Json;
 using TelerikEmployeeManagement.Repositories;
 using TelerikEmployeeManagement.Repositories.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+    // Other customization options
+});
 builder.Services.AddKendo();
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();

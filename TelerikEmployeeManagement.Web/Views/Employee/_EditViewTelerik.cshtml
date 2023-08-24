@@ -10,7 +10,7 @@
 
 @model EmployeeViewModel
 
-@using (Html.BeginForm("ListingTelerik", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("ListingTelerik", "Employee", FormMethod.Post, new { enctype = "multipart/form-data", id="iEditEmployee" }))
 {
     @Html.HiddenFor(x=> x.Employee.EmployeeId)
     <div class="mb-3">

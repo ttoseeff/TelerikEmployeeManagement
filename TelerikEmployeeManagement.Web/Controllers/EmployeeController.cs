@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
+using Microsoft.AspNetCore.Mvc;
 using TelerikEmployeeManagement.Models.Models;
 using TelerikEmployeeManagement.Repositories.Repositories;
 using TelerikEmployeeManagement.Web.ViewModels;
@@ -93,7 +95,23 @@ namespace TelerikEmployeeManagement.Web.Controllers
         public async Task<IActionResult> ListingTelerik()
         {
             EmployeeViewModel employeeViewModel = new EmployeeViewModel(_EmployeeRepository, _DepartmentRepository);
-            employeeViewModel.AllEmployees = await employeeViewModel.GetAllEmployees();
+            //employeeViewModel.AllEmployees = await employeeViewModel.GetAllEmployees();
+            #region "millions records"
+            var employeesList = new List<Employee>();
+            for (int i = 0; i < 100000; i++)
+            {
+                var emp = new Employee
+                {
+                    FirstName = $"FirstName-{i.ToString()}",
+                    LastName = $"LastName-{i.ToString()}",
+                    Email = $"Email-{i.ToString()}@email.com",
+                    DateOfBrith = DateTime.Now,
+                    Gender = TelerikEmployeeManagement.Models.Enums.Gender.Male,
+                };
+                employeesList.Add(emp);
+            }
+            employeeViewModel.AllEmployees = employeesList;
+            #endregion "millions records"
             employeeViewModel.AllDepartment = await employeeViewModel.GetAllDepartments();
             var list = await _EmployeeRepository.GetEmployees();
             return View(employeeViewModel);
@@ -164,6 +182,17 @@ namespace TelerikEmployeeManagement.Web.Controllers
             employeeViewModel.AllDepartment = await employeeViewModel.GetAllDepartments();
             employeeViewModel.Employee = employeeViewModel.AllEmployees.FirstOrDefault(x => x.EmployeeId == employeeId);
             return PartialView("_EditViewTelerik", employeeViewModel);
+        }
+
+        [HttpPost]
+        [Route("Employee_Read")]
+        public async Task<ActionResult> Employee_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            EmployeeViewModel employeeViewModel = new EmployeeViewModel(_EmployeeRepository, _DepartmentRepository);
+            IQueryable<Employee> employees = employeeViewModel.GetAllEmployeesQuery();
+            var result = await employees.ToDataSourceResultAsync(request);
+            return Json(result);
+
         }
 
     }

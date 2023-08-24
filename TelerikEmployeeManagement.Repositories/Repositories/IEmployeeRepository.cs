@@ -10,6 +10,7 @@ namespace TelerikEmployeeManagement.Repositories.Repositories
         Task<Employee> GetEmployee(Guid employeeId);
         Task<Employee> GetEmployeeByEmail(string email);
         Task<IEnumerable<Employee>> GetEmployees();
+        IQueryable<Employee> GetEmployeesQuery();
         Task<IEnumerable<Employee>> Search(string name, Gender? gender);
         Task<Employee> UpdateEmployee(Employee employee);
     }
