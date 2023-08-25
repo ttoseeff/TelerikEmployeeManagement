@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TelerikEmployeeManagement.Web.Models;
 
 namespace TelerikEmployeeManagement.Web.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -12,7 +14,6 @@ namespace TelerikEmployeeManagement.Web.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             return View();

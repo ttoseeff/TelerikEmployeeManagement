@@ -15,12 +15,14 @@
 <br />
 
 @(
-Html.Kendo().Grid<Employee>(Model.AllEmployees)
+Html.Kendo().Grid<Employee>()
         .Name("grid")
+        .Editable(e => e.Mode(GridEditMode.PopUp))
         .HtmlAttributes(new { id = "iGrid" })
         .DataSource(dataSource => dataSource
             .Ajax()
-            .ServerOperation(false)
+            .Read("Employee_Read", "Employee")
+            .Update("Editing_Update", "Employee")
          )
         .Columns(columns =>
         {

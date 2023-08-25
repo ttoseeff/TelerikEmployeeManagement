@@ -1,13 +1,16 @@
 ﻿using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TelerikEmployeeManagement.Models.Models;
 using TelerikEmployeeManagement.Repositories.Repositories;
+using TelerikEmployeeManagement.Web.Models;
 using TelerikEmployeeManagement.Web.ViewModels;
 
 namespace TelerikEmployeeManagement.Web.Controllers
 {
     [Route("[controller]")]
+    [Authorize(Roles = nameof(UserRole.Admin))]
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository _EmployeeRepository;
@@ -95,22 +98,22 @@ namespace TelerikEmployeeManagement.Web.Controllers
         public async Task<IActionResult> ListingTelerik()
         {
             EmployeeViewModel employeeViewModel = new EmployeeViewModel(_EmployeeRepository, _DepartmentRepository);
-            //employeeViewModel.AllEmployees = await employeeViewModel.GetAllEmployees();
+            employeeViewModel.AllEmployees = await employeeViewModel.GetAllEmployees();
             #region "millions records"
-            var employeesList = new List<Employee>();
-            for (int i = 0; i < 100000; i++)
-            {
-                var emp = new Employee
-                {
-                    FirstName = $"FirstName-{i.ToString()}",
-                    LastName = $"LastName-{i.ToString()}",
-                    Email = $"Email-{i.ToString()}@email.com",
-                    DateOfBrith = DateTime.Now,
-                    Gender = TelerikEmployeeManagement.Models.Enums.Gender.Male,
-                };
-                employeesList.Add(emp);
-            }
-            employeeViewModel.AllEmployees = employeesList;
+            //var employeesList = new List<Employee>();
+            //for (int i = 0; i < 100000; i++)
+            //{
+            //    var emp = new Employee
+            //    {
+            //        FirstName = $"FirstName-{i.ToString()}",
+            //        LastName = $"LastName-{i.ToString()}",
+            //        Email = $"Email-{i.ToString()}@email.com",
+            //        DateOfBrith = DateTime.Now,
+            //        Gender = TelerikEmployeeManagement.Models.Enums.Gender.Male,
+            //    };
+            //    employeesList.Add(emp);
+            //}
+            //employeeViewModel.AllEmployees = employeesList;
             #endregion "millions records"
             employeeViewModel.AllDepartment = await employeeViewModel.GetAllDepartments();
             var list = await _EmployeeRepository.GetEmployees();
@@ -194,6 +197,37 @@ namespace TelerikEmployeeManagement.Web.Controllers
             return Json(result);
 
         }
+
+        //[HttpPost]
+        //[Route("Editing_Update")]
+        //public async Task<ActionResult> Editing_Update([DataSourceRequest] DataSourceRequest request, Employee Employee)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (PhotoPath != null && PhotoPath.Length > 0)
+        //        {
+        //            var path = Path.Combine(
+        //                 Directory.GetCurrentDirectory(),
+        //                 "wwwroot", PhotoPath.FileName);
+        //            Employee.PhotoPath = PhotoPath.FileName;
+        //            using (FileStream stream = new FileStream(path, FileMode.Create))
+        //            {
+        //                await PhotoPath.CopyToAsync(stream);
+        //            }
+        //        }
+
+        //        if (Employee != null)
+        //        {
+        //            if (Employee.EmployeeId == Guid.Empty)
+        //                await _EmployeeRepository.AddEmployee(Employee);
+        //            else
+        //                await _EmployeeRepository.UpdateEmployee(Employee);
+        //        }
+        //    }
+        //    var result = await employees.ToDataSourceResultAsync(request);
+        //    return Json(result);
+
+        //}
 
     }
 }
