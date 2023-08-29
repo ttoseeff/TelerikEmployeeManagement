@@ -1,23 +1,22 @@
-﻿@model string?
+﻿@model string
 
-@Html.Kendo().TextBoxFor(m=> m)
-@Html.HiddenFor(m => m)
+@Html.HiddenFor(m => m, new {id = "etFileName"})
 @Html.ValidationMessageFor(m => m)
+<span>FIle @Model</span>
+<input type="file" class="form-control" id="IAddPhoto" name="PhotoPath" required>
+<img id="IPhotoDisplayEdit" style="height:100px" />
 
 <script>
-    function success(e) {
-        alert();
-    }
-</script>
 
-<input type="file" class="form-control" id="IAddPhoto" name="PhotoPath" required>
-@if (string.IsNullOrEmpty(Model))
-{
-    <span>No Value</span>
-}
-else
-{
-    
-<span>@Model</span>
-}
-<img src="/#=PhotoPath#" id="IPhotoDisplayEdit" style="height:100px" />
+
+    $(document).ready(function () {
+        var observer = new MutationObserver(function () {
+            var url = "/" + $("#etFileName").val();
+            console.log(url);
+            $("#IPhotoDisplayEdit").attr("src", url);
+            observer.disconnect();
+        });
+
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+    });
+</script>

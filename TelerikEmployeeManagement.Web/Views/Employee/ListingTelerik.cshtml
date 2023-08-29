@@ -35,13 +35,11 @@ Html.Kendo().Grid<Employee>()
             .Ajax()
             .Model(model =>
             {
-                model.Field(p => p.EmployeeId).Editable(false);
-                model.Field(p => p.DepartmentId).Editable(false);
                 model.Id(p => p.EmployeeId);
-                model.Field(p => p.PhotoPath).DefaultValue("Screenshot_2.png");
             })
             .Read("Employee_Read", "Employee")
             .Update("Editing_Update", "Employee")
+            .Destroy("DeleteEmployeeTelerik", "Employee")
          )
         .Columns(columns =>
         {

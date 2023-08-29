@@ -1,6 +1,9 @@
 ﻿@using TelerikEmployeeManagement.Models.Enums;
 @model Gender
-<span>@Model</span>
-<label class="radio-inline">@(Html.Kendo().RadioButtonFor(model => model).HtmlAttributes(new { id = "iGender1" }).Value(Gender.Female)) Female</label>
-        <label class="radio-inline">@(Html.Kendo().RadioButtonFor(model => model).HtmlAttributes(new { id = "iGender2" }).Value(Gender.Male)) Male</label>
-        <label class="radio-inline">@(Html.Kendo().RadioButtonFor(model => model).HtmlAttributes(new { id = "iGender3" }).Value(Gender.Other)) Other</label>
+@*<label class="radio-inline">@(Html.Kendo().RadioButtonFor(model => model).HtmlAttributes(new { id = "gender1", @checked = true }).Value(Gender.Female).Checked(true)) Female</label>
+<label class="radio-inline">@(Html.Kendo().RadioButtonFor(model => model).HtmlAttributes(new { id = "gender2" }).Value(Gender.Male)) Male</label>
+<label class="radio-inline">@(Html.Kendo().RadioButtonFor(model => model).HtmlAttributes(new { id = "gender3" }).Value(Gender.Other)) Other</label>*@
+<span>try</span>
+<label class="radio-inline"><input type="radio" name="gender" value="@Gender.Female" @(Model == Gender.Female ? "checked" : "")> Female</label>
+<label class="radio-inline"><input type="radio" name="gender" value="@Gender.Male" @(Model == Gender.Male ? "checked" : "")> Male</label>
+<label class="radio-inline"><input type="radio" name="gender" value="@Gender.Other" @(Model == Gender.Other ? "checked" : "")> Other</label>

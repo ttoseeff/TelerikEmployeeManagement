@@ -207,36 +207,40 @@ namespace TelerikEmployeeManagement.Web.Controllers
             EmployeeViewModel employeeViewModel = new EmployeeViewModel(_EmployeeRepository, _DepartmentRepository);
             return Json(await employeeViewModel.GetAllDepartments());
         }
-        //[HttpPost]
-        //[Route("Editing_Update")]
-        //public async Task<ActionResult> Editing_Update([DataSourceRequest] DataSourceRequest request, Employee Employee)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (PhotoPath != null && PhotoPath.Length > 0)
-        //        {
-        //            var path = Path.Combine(
-        //                 Directory.GetCurrentDirectory(),
-        //                 "wwwroot", PhotoPath.FileName);
-        //            Employee.PhotoPath = PhotoPath.FileName;
-        //            using (FileStream stream = new FileStream(path, FileMode.Create))
-        //            {
-        //                await PhotoPath.CopyToAsync(stream);
-        //            }
-        //        }
+        [HttpPost]
+        [Route("Editing_Update/{id?}")]
+        public async Task Editing_Update(Guid id, Employee Employee, IFormFile? PhotoPath)
+        {
+            if (ModelState.IsValid)
+            {
+                if (PhotoPath != null && PhotoPath.Length > 0)
+                {
+                    var path = Path.Combine(
+                         Directory.GetCurrentDirectory(),
+                         "wwwroot", PhotoPath.FileName);
+                    Employee.PhotoPath = PhotoPath.FileName;
+                    using (FileStream stream = new FileStream(path, FileMode.Create))
+                    {
+                        await PhotoPath.CopyToAsync(stream);
+                    }
+                }
 
-        //        if (Employee != null)
-        //        {
-        //            if (Employee.EmployeeId == Guid.Empty)
-        //                await _EmployeeRepository.AddEmployee(Employee);
-        //            else
-        //                await _EmployeeRepository.UpdateEmployee(Employee);
-        //        }
-        //    }
-        //    var result = await employees.ToDataSourceResultAsync(request);
-        //    return Json(result);
+                if (Employee != null)
+                {
+                    if (Employee.EmployeeId == Guid.Empty)
+                        await _EmployeeRepository.AddEmployee(Employee);
+                    else
+                        await _EmployeeRepository.UpdateEmployee(Employee);
+                }
+            }
+        }
 
-        //}
+        [Route("DeleteEmployeeTelerik")]
+        [HttpPost]
+        public async Task DeleteEmployee([DataSourceRequest] DataSourceRequest request, Employee Employee)
+        {
+            await _EmployeeRepository.DeleteEmployee(Employee.EmployeeId);
+        }
 
     }
 }

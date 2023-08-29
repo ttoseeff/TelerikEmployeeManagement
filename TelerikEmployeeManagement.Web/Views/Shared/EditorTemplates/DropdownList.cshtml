@@ -1,7 +1,8 @@
 ﻿@model int
-<span>@Model</span>
+
 @(Html.Kendo().DropDownListFor(m => m)
         .DataTextField("DepartmentName")
         .DataValueField("DepartmentId")
         .DataSource(source => source.Read("GetAllDepartments", "Employee"))
 )
+
