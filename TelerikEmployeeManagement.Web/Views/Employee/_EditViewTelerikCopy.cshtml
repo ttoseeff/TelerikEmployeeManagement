@@ -1,0 +1,60 @@
+﻿@using TelerikEmployeeManagement.Models.Enums;
+@using TelerikEmployeeManagement.Models.Models;
+@using TelerikEmployeeManagement.Web.ViewModels;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+@model Employee
+
+@using (Html.BeginForm("ListingTelerik", "Employee", FormMethod.Post, new { enctype = "multipart/form-data", id="iEditEmployee" }))
+{
+    @Html.HiddenFor(x=> x.EmployeeId)
+    <div class="mb-3">
+        @(Html.Kendo().TextBoxFor(model => model.FirstName).HtmlAttributes(new { @class = "form-control", id="iFirstName" })
+        .Label(l => l.Content("First Name")))
+        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class="text-danger"})
+    </div>
+    <div class="mb-3">
+        @(Html.Kendo().TextBoxFor(model => model.LastName).HtmlAttributes(new { @class = "form-control", id = "iLastName" }).Label(l => l.Content("Last Name")))
+        @Html.ValidationMessageFor(model => model.LastName, "", new { @class="text-danger"})
+    </div>
+    <div class="mb-3">
+        @(Html.Kendo().TextBoxFor(model => model.Email).HtmlAttributes(new {@class = "form-control", type="email", id= "iEmail"}).Label(l => l.Content("Email")))
+        @Html.ValidationMessageFor(model => model.Email, "", new { @class="text-danger"})
+    </div>
+    <div class="mb-3">
+        @(Html.Kendo().DatePickerFor(model => model.DateOfBrith).HtmlAttributes(new { @class = "form-control", id="iDOB"}).Label(l => l.Content("Date of Birth")))
+        @Html.ValidationMessageFor(model => model.DateOfBrith, "", new { @class="text-danger"})
+    </div>
+    <div class="mb-3">
+       @* @(Html.Kendo().DropDownListFor(model => model.DepartmentId)
+            .DataTextField("Text")
+            .DataValueField("Value")
+            .HtmlAttributes(new { @class = "form-control", id="iDepartmentId" })
+            .OptionLabel("Select a Department")
+            .Label(l => l.Content("Department"))
+            .BindTo(Model.AllDepartment.Select(x => new SelectListItem { Text = x.DepartmentName, Value = x.DepartmentId.ToString() }))
+            )*@
+        @Html.ValidationMessageFor(model => model.DepartmentId, "", new { @class="text-danger"})
+    </div>
+    <div class="mb-3">
+        <label for="IPhoto" class="form-label">Photo</label>
+        <input type="file" class="form-control" id="@($"IPhoto_")" name="PhotoPath">
+        <img src="/@(Model.PhotoPath)" style="height: 100px" id="@($"IPhotoDisplay_")" />
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Gender)
+        <label class="radio-inline">@(Html.Kendo().RadioButtonFor(model => model.Gender).HtmlAttributes(new {id="iGender1"}).Value(Gender.Female)) Female</label>
+        <label class="radio-inline">@(Html.Kendo().RadioButtonFor(model => model.Gender).HtmlAttributes(new {id="iGender2"}).Value(Gender.Male)) Male</label>
+        <label class="radio-inline">@(Html.Kendo().RadioButtonFor(model => model.Gender).HtmlAttributes(new {id="iGender3"}).Value(Gender.Other)) Other</label>
+        @Html.ValidationMessageFor(model => model.Gender, "", new { @class="text-danger"})
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+}
+
+<script src="~/controller/employee/editemployeetelerik.js"></script>

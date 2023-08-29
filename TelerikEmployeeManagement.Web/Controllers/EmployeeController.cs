@@ -165,6 +165,7 @@ namespace TelerikEmployeeManagement.Web.Controllers
             employeeViewModel.AllEmployees = await employeeViewModel.GetAllEmployees();
             employeeViewModel.AllDepartment = await employeeViewModel.GetAllDepartments();
             employeeViewModel.Employee = employeeViewModel.AllEmployees.FirstOrDefault(x => x.EmployeeId == EmployeeId);
+            ViewData["AllDepartments"] = await employeeViewModel.GetAllDepartments();
             if (!isTelerik)
             {
 
@@ -194,10 +195,18 @@ namespace TelerikEmployeeManagement.Web.Controllers
             EmployeeViewModel employeeViewModel = new EmployeeViewModel(_EmployeeRepository, _DepartmentRepository);
             IQueryable<Employee> employees = employeeViewModel.GetAllEmployeesQuery();
             var result = await employees.ToDataSourceResultAsync(request);
+            ViewData["AllDepartments"] = await employeeViewModel.GetAllDepartments();
             return Json(result);
 
         }
 
+        [HttpGet]
+        [Route("GetAllDepartments")]
+        public async Task<ActionResult> GetAllDepartments()
+        {
+            EmployeeViewModel employeeViewModel = new EmployeeViewModel(_EmployeeRepository, _DepartmentRepository);
+            return Json(await employeeViewModel.GetAllDepartments());
+        }
         //[HttpPost]
         //[Route("Editing_Update")]
         //public async Task<ActionResult> Editing_Update([DataSourceRequest] DataSourceRequest request, Employee Employee)

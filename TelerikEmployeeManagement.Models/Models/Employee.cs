@@ -15,6 +15,7 @@ namespace TelerikEmployeeManagement.Models.Models
     public class Employee
     {
         [Key]
+        [Display(AutoGenerateField = false)]
         public Guid EmployeeId { get; set; }
         [Required(ErrorMessage = "First Name Must be provided.")]
         [StringLength(100, MinimumLength = 2)]
@@ -29,12 +30,16 @@ namespace TelerikEmployeeManagement.Models.Models
         public string Email { get; set; }
         [Required]
         [DisplayName("Date of Birth")]
+        [UIHint("DatePicker")]
         public DateTime DateOfBrith { get; set; }
         [Required]
+        [UIHint("Gender")]
         public Gender? Gender { get; set; }
+        [UIHint("DropdownList")]
         public Guid? DepartmentId { get; set; }
-        public string? PhotoPath { get; set; }
 
+        [UIHint("File")]
+        public string? PhotoPath { get; set; }
         public Department? Department { get; set; }
     }
 }

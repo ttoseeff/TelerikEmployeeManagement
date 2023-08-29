@@ -1,0 +1,6 @@
+﻿@using TelerikEmployeeManagement.Models.Enums;
+@model Gender
+<span>@Model</span>
+<label class="radio-inline">@(Html.Kendo().RadioButtonFor(model => model).HtmlAttributes(new { id = "iGender1" }).Value(Gender.Female)) Female</label>
+        <label class="radio-inline">@(Html.Kendo().RadioButtonFor(model => model).HtmlAttributes(new { id = "iGender2" }).Value(Gender.Male)) Male</label>
+        <label class="radio-inline">@(Html.Kendo().RadioButtonFor(model => model).HtmlAttributes(new { id = "iGender3" }).Value(Gender.Other)) Other</label>

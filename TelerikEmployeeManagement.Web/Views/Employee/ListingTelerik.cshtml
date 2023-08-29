@@ -9,30 +9,56 @@
 
 @model EmployeeViewModel
 
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+@*<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
     Add Employee
-</button>
+</button>*@
+<style>
+    /* Hide the EmployeeId field in the edit form */
+    .k-edit-form-container [name="EmployeeId"] {
+        display: none;
+    }
+
+    .k-edit-form-container [for="EmployeeId"] {
+        display: none;
+    }
+
+</style>
 <br />
 
 @(
 Html.Kendo().Grid<Employee>()
         .Name("grid")
-        .Editable(e => e.Mode(GridEditMode.PopUp))
+        .Editable(e => e.Mode(GridEditMode.PopUp).TemplateName("EditViewTelerikCopy"))
         .HtmlAttributes(new { id = "iGrid" })
+        .ToolBar(toolbar => toolbar.Create())
         .DataSource(dataSource => dataSource
             .Ajax()
+            .Model(model =>
+            {
+                model.Field(p => p.EmployeeId).Editable(false);
+                model.Field(p => p.DepartmentId).Editable(false);
+                model.Id(p => p.EmployeeId);
+                model.Field(p => p.PhotoPath).DefaultValue("Screenshot_2.png");
+            })
             .Read("Employee_Read", "Employee")
             .Update("Editing_Update", "Employee")
          )
         .Columns(columns =>
         {
+            columns.Bound(f => f.EmployeeId).Hidden(true);
+            columns.Bound(f => f.DepartmentId).Hidden(true);
             columns.Bound(f => f.FirstName);
             columns.Bound(f => f.LastName);
             columns.Bound(f => f.Email);
+            columns.Bound(f => f.PhotoPath).ClientTemplate("<img src='/" + "#= PhotoPath #" + "' style='height:100px' />");
+            columns.Command(commands =>
+            {
+                commands.Edit();
+                commands.Destroy();
+            }).Title("Actions").Width(200);
         })
         .Pageable()
         .Sortable()
-        
     )
 
 
@@ -46,7 +72,7 @@ Html.Kendo().Grid<Employee>()
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm("ListingTelerik", "Employee", FormMethod.Post, new { enctype = "multipart/form-data", id="iAddEmployee" }))
+                @using (Html.BeginForm("ListingTelerik", "Employee", FormMethod.Post, new { enctype = "multipart/form-data", id = "iAddEmployee" }))
                 {
                     @Html.ValidationSummary()
                     <div class="mb-3">

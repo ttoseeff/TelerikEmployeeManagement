@@ -1,0 +1,23 @@
+﻿@model string?
+
+@Html.Kendo().TextBoxFor(m=> m)
+@Html.HiddenFor(m => m)
+@Html.ValidationMessageFor(m => m)
+
+<script>
+    function success(e) {
+        alert();
+    }
+</script>
+
+<input type="file" class="form-control" id="IAddPhoto" name="PhotoPath" required>
+@if (string.IsNullOrEmpty(Model))
+{
+    <span>No Value</span>
+}
+else
+{
+    
+<span>@Model</span>
+}
+<img src="/#=PhotoPath#" id="IPhotoDisplayEdit" style="height:100px" />
