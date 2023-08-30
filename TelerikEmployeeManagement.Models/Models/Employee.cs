@@ -26,7 +26,7 @@ namespace TelerikEmployeeManagement.Models.Models
         public string LastName { get; set; }
         [EmailAddress]
         [Required]
-        [EmailDomainValidator(AllowedDomain = "toseef.com", ErrorMessage = "Domain must be Toseef.com")]
+        [EmailDomainValidator(AllowedDomain = "toseef.com", ErrorMessage = "Domain must be toseef.com")]
         public string Email { get; set; }
         [Required]
         [DisplayName("Date of Birth")]

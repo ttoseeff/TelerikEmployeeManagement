@@ -1,17 +1,43 @@
 ﻿@model string
 
-@Html.HiddenFor(m => m, new {id = "etFileName"})
+@Html.HiddenFor(m => m)
 @Html.ValidationMessageFor(m => m)
-<span>FIle @Model</span>
-<input type="file" class="form-control" id="IAddPhoto" name="PhotoPath" required>
+
+<script>
+    function success(e) {
+        console.log(e);
+        var imagePath = e.response.PhotoPath;
+        $("#IPhotoDisplayEdit").attr("src", "/"+imagePath);
+        $("#PhotoPath").val(imagePath).trigger("change");
+    }
+</script>
+
+@(Html.Kendo().Upload()
+.Name("file")
+    .Multiple(false)
+    .Async(a => a
+        .Save("SaveFile", "Employee")
+        .AutoUpload(true)
+    )
+    .HtmlAttributes(new {@class="form-control"})
+    .Events(e => e.Upload(@<text>
+           function(e) {
+             e.data = { ids: 1 };
+           }
+       </text>).Success("success"))
+ )
 <img id="IPhotoDisplayEdit" style="height:100px" />
+
+
+
+
 
 <script>
 
 
     $(document).ready(function () {
         var observer = new MutationObserver(function () {
-            var url = "/" + $("#etFileName").val();
+            var url = "/" + $("#PhotoPath").val();
             console.log(url);
             $("#IPhotoDisplayEdit").attr("src", url);
             observer.disconnect();

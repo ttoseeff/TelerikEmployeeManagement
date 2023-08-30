@@ -28,7 +28,7 @@
 @(
 Html.Kendo().Grid<Employee>()
         .Name("grid")
-        .Editable(e => e.Mode(GridEditMode.PopUp).TemplateName("EditViewTelerikCopy"))
+        .Editable(e => e.Mode(GridEditMode.PopUp))
         .HtmlAttributes(new { id = "iGrid" })
         .ToolBar(toolbar => toolbar.Create())
         .DataSource(dataSource => dataSource
@@ -39,6 +39,7 @@ Html.Kendo().Grid<Employee>()
             })
             .Read("Employee_Read", "Employee")
             .Update("Editing_Update", "Employee")
+            .Create("Editing_Update", "Employee")
             .Destroy("DeleteEmployeeTelerik", "Employee")
          )
         .Columns(columns =>
@@ -48,7 +49,7 @@ Html.Kendo().Grid<Employee>()
             columns.Bound(f => f.FirstName);
             columns.Bound(f => f.LastName);
             columns.Bound(f => f.Email);
-            columns.Bound(f => f.PhotoPath).ClientTemplate("<img src='/" + "#= PhotoPath #" + "' style='height:100px' />");
+            columns.Bound(f => f.PhotoPath).ClientTemplate("<img src='/" + "#=PhotoPath#' alt='#=FirstName #' Title='#=FirstName #' height='62' width='62'/>");
             columns.Command(commands =>
             {
                 commands.Edit();
@@ -57,6 +58,7 @@ Html.Kendo().Grid<Employee>()
         })
         .Pageable()
         .Sortable()
+        .Filterable()
     )
 
 
