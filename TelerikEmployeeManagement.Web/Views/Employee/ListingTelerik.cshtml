@@ -28,6 +28,7 @@
 @(
 Html.Kendo().Grid<Employee>()
         .Name("grid")
+        .Events(events => events.BeforeEdit("onChange"))
         .Editable(e => e.Mode(GridEditMode.PopUp))
         .HtmlAttributes(new { id = "iGrid" })
         .ToolBar(toolbar => toolbar.Create())
@@ -59,6 +60,7 @@ Html.Kendo().Grid<Employee>()
         .Pageable()
         .Sortable()
         .Filterable()
+        .Selectable()
     )
 
 
@@ -98,7 +100,7 @@ Html.Kendo().Grid<Employee>()
                             .HtmlAttributes(new { @class = "form-control" })
                             .OptionLabel("Select a Department")
                             .Label(l => l.Content("Department"))
-                            .BindTo(Model.AllDepartment.Select(x => new SelectListItem { Text = x.DepartmentName, Value = x.DepartmentId.ToString() }))
+                            .BindTo(Model.AllDepartment.Select(x => new SelectListItem { Text = x.DepartmentName, Value = (x.DepartmentId != Guid.Empty ? x.DepartmentId.ToString() : Guid.Empty.ToString()) }))
                             )
                         @Html.ValidationMessageFor(model => model.Employee.DepartmentId, "", new { @class="text-danger"})
                     </div>
@@ -193,9 +195,12 @@ Html.Kendo().Grid<Employee>()
 <script>
 
     function onError(e) {
-        debugger
-        alert();
-        console.log(e.status);
+    }
+
+    function onChange(e){
+        e.model.Gender = 1;
+        e.model.DepartmentId = 'DEF2C50E-FFEA-4484-9441-292E8411ACF7'.toLowerCase();
+        e.model.EmployeeId = '00000000-0000-0000-0000-000000000000';
     }
 </script>
 

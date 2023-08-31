@@ -212,7 +212,6 @@
     
 
     function setEditEmployeeModalPhotos(employees) {
-        console.log(employees)
     for (var i = 0; i < employees.length; i++) {
         var fileElementId = "IPhoto_" + employees[i]["employeeId"];
         var photoElementId = "IPhotoDisplay_" + employees[i]["employeeId"];
@@ -222,7 +221,6 @@
         const previewImage = document.getElementById(photoElementId);
 
         imageInput.addEventListener('change', function (event) {
-            console.log("invoked")
             const selectedFile = event.target.files[0];
 
             if (selectedFile) {

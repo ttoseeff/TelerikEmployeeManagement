@@ -5,7 +5,6 @@
 
 <script>
     function success(e) {
-        console.log(e);
         var imagePath = e.response.PhotoPath;
         $("#IPhotoDisplayEdit").attr("src", "/"+imagePath);
         $("#PhotoPath").val(imagePath).trigger("change");
@@ -38,8 +37,13 @@
     $(document).ready(function () {
         var observer = new MutationObserver(function () {
             var url = "/" + $("#PhotoPath").val();
-            console.log(url);
-            $("#IPhotoDisplayEdit").attr("src", url);
+            if(url == "/"){
+                $("#IPhotoDisplayEdit").attr("src", "/1.png");
+            }
+            else{
+                $("#IPhotoDisplayEdit").attr("src", url);
+
+            }
             observer.disconnect();
         });
 

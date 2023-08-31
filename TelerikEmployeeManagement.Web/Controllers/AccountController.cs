@@ -144,5 +144,10 @@ namespace TelerikEmployeeManagement.Web.Controllers
             return View();
         }
 
+        public async Task<IActionResult> AccessDenied()
+        {
+            return View();
+        }
+
     }
 }
